@@ -462,7 +462,7 @@ const WelcomeScreen = ({ onSend, onFindProfessional }) => (
 
 // ─── Main ChatBox ─────────────────────────────────────────────────────────────
 const ChatBox = ({ onMicClick }) => {
-  const { user: authUser } = useAuth();
+  const { user: authUser, getAuthHeaders } = useAuth();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -488,7 +488,7 @@ const ChatBox = ({ onMicClick }) => {
 
   const fetchConversations = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/chat/conversations`, { credentials: "include" });
+      const res = await fetch(`${API_BASE_URL}/chat/conversations`, { headers: getAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         setChats(data.conversations.map(c => ({ id: c.id, title: c.title, lastMessage: c.lastMessage })));
@@ -539,8 +539,7 @@ const ChatBox = ({ onMicClick }) => {
     try {
       const res = await fetch(`${API_BASE_URL}/chat/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify({ message: text, conversationId: conversationIdRef.current }),
         signal: abortControllerRef.current.signal,
       });
@@ -586,7 +585,7 @@ const ChatBox = ({ onMicClick }) => {
     if (chatId === conversationIdRef.current) return;
     setActiveConversation(chatId);
     try {
-      const res = await fetch(`${API_BASE_URL}/chat/conversation/${chatId}`, { credentials: "include" });
+      const res = await fetch(`${API_BASE_URL}/chat/conversation/${chatId}`, { headers: getAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         setMessages(data.conversation.messages.map(m => ({ role: m.role, text: m.content })));
@@ -595,7 +594,7 @@ const ChatBox = ({ onMicClick }) => {
   };
   const handleDeleteChat = async (chatId) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/chat/conversation/${chatId}`, { method: "DELETE", credentials: "include" });
+      const res = await fetch(`${API_BASE_URL}/chat/conversation/${chatId}`, { method: "DELETE", headers: getAuthHeaders() });
       if (res.ok) { if (conversationIdRef.current === chatId) handleNewChat(); await fetchConversations(); }
     } catch { }
   };
@@ -646,7 +645,7 @@ const ChatBox = ({ onMicClick }) => {
         onSearchChange={setSearchQuery}
         onClearHistory={async () => {
           try {
-            const res = await fetch(`${API_BASE_URL}/chat/conversations/clear`, { method: "DELETE", credentials: "include" });
+            const res = await fetch(`${API_BASE_URL}/chat/conversations/clear`, { method: "DELETE", headers: getAuthHeaders() });
             if (res.ok) { handleNewChat(); await fetchConversations(); return true; }
             return false;
           } catch { return false; }
