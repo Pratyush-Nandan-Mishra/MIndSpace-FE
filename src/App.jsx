@@ -7,6 +7,7 @@ import { AdminDashboard } from './pages/dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminStats from "./pages/dashboard/AdminStats";
 import Landing from './landing/landing';
+import AuthRedirect from './pages/AuthRedirect';
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/auth/redirect" element={<AuthRedirect />} />
           <Route path="*" element={<Landing />} />
         </Routes>
       </Router>

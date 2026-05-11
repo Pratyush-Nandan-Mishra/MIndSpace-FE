@@ -18,68 +18,83 @@ export const AuthProvider = ({ children }) => {
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4433/api';
 
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('accessToken');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  };
+
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
       try {
         const response = await fetch(`${API_BASE_URL}/auth/me`, {
-          method: 'GET',
-          credentials: 'include',
+          headers: { 'Authorization': `Bearer ${token}` },
         });
-
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.user) {
             setUser(data.user);
             setIsAuthenticated(true);
+          } else {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
           }
-          else {
-            setUser(null);
-            setIsAuthenticated(false);
-          }
-        }
-        else {
-          setUser(null);
-          setIsAuthenticated(false);
+        } else {
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
         }
       } catch (error) {
-        console.error('Error fetching user from /auth/me:', error);
-        setUser(null);
-        setIsAuthenticated(false);
+        console.error('Auth check failed:', error);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserProfile(); 
+    checkAuth();
   }, []);
+
+  const handleTokenLogin = async (accessToken, refreshToken) => {
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('refreshToken', refreshToken);
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/me`, {
+        headers: { 'Authorization': `Bearer ${accessToken}` },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success && data.user) {
+          setUser(data.user);
+          setIsAuthenticated(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching user after login:', error);
+    }
+  };
 
   const loginWithGoogle = () => {
     window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
-  const logout = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        setUser(null);
-        setIsAuthenticated(false);
-        window.location.href = '/';
-      }
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setUser(null);
+    setIsAuthenticated(false);
+    window.location.href = '/';
   };
 
   const getUserProfile = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/me`, {
-        credentials: 'include',
+        headers: getAuthHeaders(),
       });
-
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -103,11 +118,11 @@ export const AuthProvider = ({ children }) => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          ...getAuthHeaders(),
         },
         credentials: 'include',
         body: JSON.stringify(profileData),
       });
-
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
@@ -129,11 +144,13 @@ export const AuthProvider = ({ children }) => {
     logout,
     getUserProfile,
     updateUserProfile,
+    handleTokenLogin,
+    getAuthHeaders,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children} {/* Prevent render before auth check */}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };
