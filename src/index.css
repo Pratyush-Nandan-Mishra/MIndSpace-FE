@@ -1,0 +1,243 @@
+@import "tailwindcss";
+
+/* Dark Theme Design System for SHAKTE */
+:root {
+  /* Core Dark Colors */
+  --bg-primary: #0a0a0b;
+  --bg-secondary: #141419;
+  --bg-card: #1a1a1f;
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  
+  /* Brand Colors */
+  /* --brand-purple: #8b5cf6;
+  --brand-purple-light: #a78bfa;
+  --brand-purple-dark: #7c3aed; */
+  
+  /* Gradient Backgrounds */
+  --gradient-hero: radial-gradient(circle at 50% 50%, 
+    rgba(139, 92, 246, 0.3) 0%, 
+    rgba(168, 139, 250, 0.2) 30%, 
+    rgba(236, 72, 153, 0.15) 60%, 
+    transparent 100%);
+    
+  --gradient-card: linear-gradient(135deg, 
+    rgba(139, 92, 246, 0.1) 0%, 
+    rgba(168, 139, 250, 0.05) 50%, 
+    rgba(236, 72, 153, 0.1) 100%);
+    
+  /* --gradient-button: linear-gradient(135deg, 
+    #8b5cf6 0%, 
+    #a78bfa  100%); */
+    
+  /* Borders */
+  --border-primary: rgba(139, 92, 246, 0.2);
+  --border-secondary: rgba(255, 255, 255, 0.1);
+}
+
+@layer base {
+  
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  .gradient-bg {
+    background: var(--gradient-hero);
+  }
+  
+  .card-gradient {
+    background: var(--gradient-card);
+  }
+  
+  .button-gradient {
+    background: var(--gradient-button);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(135deg, var(--brand-purple), var(--brand-purple-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .blur-effect {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  .glass-effect {
+    background: rgba(26, 26, 31, 0.4);
+    border: 1px solid var(--border-secondary);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--brand-purple);
+    border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--brand-purple-light);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.6s ease-out forwards;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Ant Design Dark Theme Overrides */
+.ant-btn-primary {
+  background: var(--gradient-button) !important;
+  border: none !important;
+  /* box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4) !important; */
+}
+
+.ant-btn-primary:hover {
+  background: var(--gradient-button) !important;
+  transform: translateY(-2px) !important;
+  /* box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6) !important; */
+}
+
+.ant-menu {
+  background: transparent !important;
+  border: none !important;
+}
+
+.ant-menu-item {
+  color: var(--text-secondary) !important;
+}
+
+.ant-menu-item:hover {
+  color: var(--text-primary) !important;
+  /* background: rgba(139, 92, 246, 0.1) !important; */
+}
+
+.ant-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-secondary) !important;
+}
+
+.ant-switch-checked {
+  background-color: var(--brand-purple) !important;
+}
+
+.ant-input,
+.ant-input:focus {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Dark theme Ant Design dropdown overrides */
+.ant-dropdown {
+  background: var(--bg-secondary) !important;
+}
+
+.ant-dropdown .ant-dropdown-menu {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-secondary) !important;
+}
+
+.ant-dropdown .ant-dropdown-menu-item {
+  color: var(--text-secondary) !important;
+}
+
+.ant-dropdown .ant-dropdown-menu-item:hover {
+  /* background: rgba(139, 92, 246, 0.1) !important; */
+  color: var(--brand-purple) !important;
+}
+
+.ant-dropdown .ant-dropdown-menu-item-divider {
+  border-color: var(--border-secondary) !important;
+}
+
+/* Testimonials Carousel Styling */
+.testimonials-carousel .slick-slide {
+  padding: 0 8px;
+}
+
+.testimonials-carousel .slick-list {
+  overflow: visible;
+}
+
+.testimonials-carousel .slick-track {
+  display: flex;
+  align-items: stretch;
+}
