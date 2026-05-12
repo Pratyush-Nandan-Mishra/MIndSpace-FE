@@ -153,9 +153,9 @@ const Sidebar = ({ isOpen, onToggle, chats, currentChatId, onNewChat, onSelectCh
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-full bg-[#0a0a1a] border-r border-white/5 z-50 transform transition-all duration-300 ease-in-out
-          ${isOpen ? 'w-72' : 'w-16'}
-          md:relative md:translate-x-0`}
+        className={`fixed left-0 top-0 h-full bg-[#0a0a1a] border-r border-white/5 z-50 transition-all duration-300 ease-in-out
+          ${isOpen ? 'w-72 translate-x-0' : 'w-16 -translate-x-full md:translate-x-0'}
+          md:relative`}
       >
         <div className="flex flex-col h-full bg-[#0a0a1a] overflow-hidden">
           {/* Header */}

@@ -306,7 +306,7 @@ const ProfessionalsModal = ({ onClose, onCall }) => (
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.06 }}
-              className="bg-white/[0.03] border border-white/8 hover:border-white/20 rounded-2xl p-5 flex gap-4 group transition-all duration-200 hover:bg-white/[0.06]"
+              className="bg-white/[0.03] border border-white/8 hover:border-white/20 rounded-2xl p-5 flex flex-col sm:flex-row gap-4 group transition-all duration-200 hover:bg-white/[0.06]"
             >
               <div className={`w-14 h-14 bg-gradient-to-br ${p.color} rounded-2xl flex items-center justify-center text-white font-black text-base flex-shrink-0 shadow-lg`}>
                 {p.initials}
@@ -326,7 +326,7 @@ const ProfessionalsModal = ({ onClose, onCall }) => (
                   <span className="flex items-center gap-1.5"><PhoneOutlined style={{ fontSize: 11 }} />{p.phone}</span>
                 </div>
               </div>
-              <div className="flex-shrink-0 self-center">
+              <div className="flex-shrink-0 self-start sm:self-center">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -365,7 +365,7 @@ const ChatMessage = ({ role, text, onCopy, onSpeak, avatar }) => (
       </div>
     )}
     <div
-      className={`px-4 py-3 rounded-2xl max-w-[75%] ${
+      className={`px-4 py-3 rounded-2xl max-w-[85%] sm:max-w-[75%] ${
         role === "user"
           ? "bg-gradient-to-br from-violet-600 to-purple-600 text-white rounded-br-sm shadow-lg shadow-violet-900/30"
           : "bg-white/5 backdrop-blur border border-white/10 text-slate-200 rounded-bl-sm"
@@ -422,7 +422,7 @@ const QUICK_REPLIES = [
 const WelcomeScreen = ({ onSend, onFindProfessional }) => (
   <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6 }}
-    className="flex flex-col items-center justify-center h-full text-center px-8 gap-6">
+    className="flex flex-col items-center justify-center h-full text-center px-4 sm:px-8 gap-6">
     <motion.div
       animate={{ scale: [1, 1.05, 1] }}
       transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -468,7 +468,7 @@ const ChatBox = ({ onMicClick }) => {
   const [loading, setLoading] = useState(false);
   const [isRateLimited, setIsRateLimited] = useState(false);
   const [typingText, setTypingText] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 768);
   const [searchQuery, setSearchQuery] = useState("");
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -602,7 +602,7 @@ const ChatBox = ({ onMicClick }) => {
   const showWelcome = messages.length === 0 && !loading && !typingText;
 
   return (
-    <div className="flex h-screen bg-[#050510] overflow-hidden">
+    <div className="flex h-[100dvh] bg-[#050510] overflow-hidden">
       {/* Ambient blobs */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <motion.div className="absolute top-0 left-1/3 w-96 h-96 bg-violet-800/10 rounded-full blur-3xl"
@@ -653,10 +653,10 @@ const ChatBox = ({ onMicClick }) => {
       />
 
       {/* Main area */}
-      <div className="relative z-10 flex flex-col flex-1 h-screen overflow-hidden">
+      <div className="relative z-10 flex flex-col flex-1 h-[100dvh] overflow-hidden">
 
         {/* Top bar */}
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-white/5 bg-black/20 backdrop-blur">
+        <div className="flex items-center gap-3 px-3 sm:px-6 py-3 sm:py-4 border-b border-white/5 bg-black/20 backdrop-blur">
           <div className="w-8 h-8 bg-gradient-to-br from-violet-600 to-pink-500 rounded-xl flex items-center justify-center text-base shadow shadow-violet-500/30">
             🧠
           </div>
@@ -686,7 +686,7 @@ const ChatBox = ({ onMicClick }) => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-6 sm:py-6 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
           {showWelcome ? (
             <WelcomeScreen onSend={sendMessage} onFindProfessional={() => setShowProfessionals(true)} />
           ) : (
@@ -704,7 +704,7 @@ const ChatBox = ({ onMicClick }) => {
         </div>
 
         {/* Input bar */}
-        <div className="px-6 py-4 border-t border-white/5 bg-black/20 backdrop-blur">
+        <div className="px-3 py-3 sm:px-6 sm:py-4 border-t border-white/5 bg-black/20 backdrop-blur">
           {isRateLimited && (
             <div className="mb-3 text-center text-xs text-violet-300 bg-violet-500/10 border border-violet-500/20 rounded-xl px-4 py-2">
               You've reached the message limit. Upgrade to continue.

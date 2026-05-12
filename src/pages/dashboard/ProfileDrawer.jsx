@@ -21,7 +21,7 @@ const ProfileDrawer = ({ isOpen, onClose, initialData, onSave }) => {
         <Drawer
             title="Edit Profile"
             placement="right"
-            width={400}
+            width={Math.min(400, window.innerWidth)}
             open={isOpen}
             onClose={onClose}
             destroyOnClose
